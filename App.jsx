@@ -1,101 +1,94 @@
-import { useState, useEffect } from "react";
+import React from "react";
 import {
-  Alert,
-  BackHandler,
+  Button,
+  DrawerLayoutAndroid,
   Image,
   StyleSheet,
   Text,
   View,
 } from "react-native";
 import img from "./assets/favicon.png";
+
 export default function App() {
-  useEffect(() => {
-    const exitHandler = () => {
-      Alert.alert("Exit", "Are you sure you want to exit?", [
-        {
-          text: "Cancel",
-          onPress: () => {},
-          style: "cancel",
-        },
-        { text: "OK", onPress: () => BackHandler.exitApp() },
-      ]);
-      return true;
-    };
-const backHandler = BackHandler.addEventListener("hardwareBackPress", exitHandler);
-return () => backHandler.remove();
-  }, []);
+  const [position, setPosition] = React.useState("left");
+  const drawerRef = React.useRef(null);
+
+  const openDrawer = () => {
+    drawerRef.current.openDrawer();
+  };
+
   return (
     <>
       <View style={styles.navbar}>
         <Image source={img} style={styles.img} />
         <Text>SaLim</Text>
       </View>
+
+      <View style={styles.container}>
+        <DrawerLayoutAndroid
+          ref={drawerRef}
+          drawerWidth={300}
+          drawerPosition={position}
+          renderNavigationView={() => (
+            <View style={styles.drawer}>
+              <Text>Drawer Content</Text>
+              <Button
+                title="Close"
+                onPress={() => drawerRef.current.closeDrawer()}
+              />
+            </View>
+          )}
+        >
+          <View style={styles.container}>
+            <Button title="Open Drawer" onPress={openDrawer} />
+            <Button
+              title="Change Position"
+              onPress={() =>
+                position === "left" ? setPosition("right") : setPosition("left")
+              }
+            />
+          </View>
+        </DrawerLayoutAndroid>
+      </View>
     </>
   );
 }
 
-const isActive = true;
+const styles = StyleSheet.create({
+  container: {
+    
+    flex: 1,
+    flexDirection: "column",
+    gap: 10,
+    padding: 10,
 
-const lightStyles = StyleSheet.create({
+    justifyContent: "center",
+    
+  },
   navbar: {
     flexDirection: "row",
-    justifyContent: "space-between",
-
     alignItems: "center",
+    justifyContent: "space-between",
     padding: 10,
-    backgroundColor: "#00cccc",
-    color: "#0cc",
-    gap: 10,
-  },
-  button: {
-    backgroundColor: "#999",
-    padding: 10,
-    paddingHorizontal: 50,
-    borderRadius: 10,
-    margin: 10,
-  },
-  container: {
+    backgroundColor: "#a25f00",
+    borderBottomWidth: 1,
+    borderBottomColor: "#cccccc",
+    gap: 100,
     width: "100%",
+  },
+  img: {
+    width: 30,
+    height: 30,
+    marginRight: 10,
+  },
+  content: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    padding: 10,
-    backgroundColor: "#eee",
-    gap: 10,
   },
-  h1: {
-    color: "#fff",
-    fontSize: 30,
-  },
-  textInput: {
-    width: "90%",
-    backgroundColor: "pink",
-    borderRadius: 10,
-    padding: 4,
-    margin: 2,
-    fontSize: 16,
-  },
-});
-const darkStyles = StyleSheet.create({
-  container: {
-    textAlign: "center",
+  drawer: {
     flex: 1,
-    backgroundColor: "#ccc",
-
-    gap: 10,
-  },
-  h1: {
-    color: "#fff",
-    fontSize: 30,
-  },
-  textInput: {
-    width: "90%",
-    backgroundColor: "pink",
-    borderRadius: 10,
-    padding: 4,
-    margin: 2,
-    fontSize: 16,
+    backgroundColor: "#ffffff",
+    padding: 10,
   },
 });
-
-const styles = isActive ? lightStyles : darkStyles;
