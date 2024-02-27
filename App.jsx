@@ -1,59 +1,35 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
-  Button,
-  FlatList,
+  Alert,
+  BackHandler,
   Image,
-  Pressable,
-  RefreshControl,
-  ScrollView,
-  SectionList,
   StyleSheet,
-  Switch,
   Text,
-  TextInput,
-  TouchableOpacity,
   View,
 } from "react-native";
 import img from "./assets/favicon.png";
-const apiData = [
-  { id: 1, title: "Title 1", description: "Description 1" },
-  { id: 2, title: "Title 2", description: "Description 2" },
-  { id: 3, title: "Title 3", description: "Description 3" },
-  { id: 4, title: "Title 4", description: "Description 4" },
-  { id: 5, title: "Title 5", description: "Description 5" },
-  { id: 6, title: "Title 6", description: "Description 6" },
-  { id: 7, title: "Title 7", description: "Description 7" },
-  { id: 8, title: "Title 8", description: "Description 8" },
-  { id: 9, title: "Title 9", description: "Description 9" },
-  { id: 10, title: "Title 10", description: "Description 10" },
-];
 export default function App() {
-  const [layout, setLayout] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
-  const [refresh, setRefresh] = useState(false);
-  const [data, setData] = useState(apiData);
-  const toggleLoading = () => setIsLoading(!isLoading);
-  const layoutHandler = (e) => {
-    const { layout } = e.nativeEvent;
-    setLayout(layout);
-  };
-  console.log(isLoading);
-  // console.log(layout);
-
-  const refreshHandler = () => {
-    setRefresh(true);
-    setTimeout(() => {
-      setData(apiData);
-      setRefresh(false);
-    }, 1000);
-  };
+  useEffect(() => {
+    const exitHandler = () => {
+      Alert.alert("Exit", "Are you sure you want to exit?", [
+        {
+          text: "Cancel",
+          onPress: () => {},
+          style: "cancel",
+        },
+        { text: "OK", onPress: () => BackHandler.exitApp() },
+      ]);
+      return true;
+    };
+const backHandler = BackHandler.addEventListener("hardwareBackPress", exitHandler);
+return () => backHandler.remove();
+  }, []);
   return (
     <>
       <View style={styles.navbar}>
         <Image source={img} style={styles.img} />
         <Text>SaLim</Text>
       </View>
-     
     </>
   );
 }
