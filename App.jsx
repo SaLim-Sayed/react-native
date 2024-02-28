@@ -3,6 +3,7 @@ import {
   Button,
   DrawerLayoutAndroid,
   Image,
+  PermissionsAndroid,
   StyleSheet,
   Text,
   View,
@@ -10,13 +11,29 @@ import {
 import img from "./assets/favicon.png";
 
 export default function App() {
-  const [position, setPosition] = React.useState("left");
-  const drawerRef = React.useRef(null);
-
-  const openDrawer = () => {
-    drawerRef.current.openDrawer();
+  const reqestCameraPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          title: "Photo AppCamera Permission",
+          message:
+            "Photo App needs access to your camera " +
+            "so you can take awesome pictures.",
+          buttonNeutral: "Ask Me Later",
+          buttonNegative: "Cancel",
+          buttonPositive: "OK",
+        }
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log("You can use the camera");
+      } else {
+        console.log("Camera permission denied");
+      }
+    } catch (err) {
+      console.warn(err);
+    }
   };
-
   return (
     <>
       <View style={styles.navbar}>
@@ -25,30 +42,10 @@ export default function App() {
       </View>
 
       <View style={styles.container}>
-        <DrawerLayoutAndroid
-          ref={drawerRef}
-          drawerWidth={300}
-          drawerPosition={position}
-          renderNavigationView={() => (
-            <View style={styles.drawer}>
-              <Text>Drawer Content</Text>
-              <Button
-                title="Close"
-                onPress={() => drawerRef.current.closeDrawer()}
-              />
-            </View>
-          )}
-        >
-          <View style={styles.container}>
-            <Button title="Open Drawer" onPress={openDrawer} />
-            <Button
-              title="Change Position"
-              onPress={() =>
-                position === "left" ? setPosition("right") : setPosition("left")
-              }
-            />
-          </View>
-        </DrawerLayoutAndroid>
+        <Button
+          title="request camera permission"
+          onPress={reqestCameraPermission}
+        />
       </View>
     </>
   );
@@ -56,14 +53,12 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    
     flex: 1,
     flexDirection: "column",
     gap: 10,
     padding: 10,
 
     justifyContent: "center",
-    
   },
   navbar: {
     flexDirection: "row",
