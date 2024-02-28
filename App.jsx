@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Alert,
   Button,
   DrawerLayoutAndroid,
   Image,
@@ -12,9 +13,22 @@ import {
 import img from "./assets/favicon.png";
 
 export default function App() {
-  const showToast = () => {
-ToastAndroid.show("Hello World", ToastAndroid.SHORT,ToastAndroid.TOP);
-  }
+ const alertHandler = () => {
+   Alert.pr("hello", "how are you", [
+     {
+       text: "yes",
+       onPress: () => {
+         ToastAndroid.show("yes", ToastAndroid.SHORT);
+       },
+     },
+     {
+       text: "no",
+       onPress: () => {
+         ToastAndroid.show("no", ToastAndroid.SHORT);
+       },
+     },
+   ])
+ }
   return (
     <>
       <View style={styles.navbar}>
@@ -22,11 +36,9 @@ ToastAndroid.show("Hello World", ToastAndroid.SHORT,ToastAndroid.TOP);
         <Text>SaLim</Text>
       </View>
 
-      <View style={styles.container}>
-        <Button
-      title="Open toast"
-      onPress={showToast}
-        />
+      <View  style={styles.container}>
+
+        <Button title="alert" onPress={alertHandler} />
       </View>
     </>
   );
