@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Alert,
+  Animated,
   Button,
   DrawerLayoutAndroid,
   Image,
+  Linking,
   PermissionsAndroid,
   StyleSheet,
   Text,
@@ -13,22 +15,6 @@ import {
 import img from "./assets/favicon.png";
 
 export default function App() {
- const alertHandler = () => {
-   Alert.pr("hello", "how are you", [
-     {
-       text: "yes",
-       onPress: () => {
-         ToastAndroid.show("yes", ToastAndroid.SHORT);
-       },
-     },
-     {
-       text: "no",
-       onPress: () => {
-         ToastAndroid.show("no", ToastAndroid.SHORT);
-       },
-     },
-   ])
- }
   return (
     <>
       <View style={styles.navbar}>
@@ -36,9 +22,20 @@ export default function App() {
         <Text>SaLim</Text>
       </View>
 
-      <View  style={styles.container}>
+      <View style={styles.container}>
+        <Button
+          title="Open Mail"
+          onPress={() => Linking.openURL("mailto:Z5S6t@example.com")}
+        />
 
-        <Button title="alert" onPress={alertHandler} />
+        <Button
+          title="Open Browser"
+          onPress={() =>
+            Linking.openURL("https://www.google.com/").catch((err) => {
+              console.log(err);
+            })
+          }
+        />
       </View>
     </>
   );
